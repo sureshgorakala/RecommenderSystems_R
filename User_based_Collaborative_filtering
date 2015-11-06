@@ -60,9 +60,8 @@ return(rat_user)
 }
 
 
-#x[sapply(x, function(x) any(is.na(x)))]
+#to get N recommendations:
+rec_itm_for_user(1) #first person recommendations
 
 
-
-item_sim = cosine(as.matrix(x)) #item similarity
 
