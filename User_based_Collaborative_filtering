@@ -1,0 +1,68 @@
+library(lsa)
+critics = read.csv("movieratings.csv")
+#calculate the euclidian distance 
+#EUD = dist(critics[,2:7])
+#cosine similarity calculation
+x  = critics[,2:7]
+x[is.na(x)] = 0
+user_sim = cosine(as.matrix(t(x))) #user similarity
+#Recommending items
+#for Toby
+
+#create weightge matrix
+weight_mat = user_sim[,7]*critics[,2:7]
+
+rec_itm_for_user = function(userNo)
+{
+#calcualte column wise sum
+col_sums= list()
+rat_user = critics[userNo,2:ncol(critics)]
+x=1
+tot = list()
+z=1
+
+for(i in 1:ncol(rat_user)){
+  if(is.na(rat_user[1,i]))
+  {
+    
+    col_sums[x] = sum(weight_mat[,i],na.rm=TRUE)
+    x=x+1
+    
+    temp = as.data.frame(weight_mat[,i])
+    
+    sum_temp=0
+    
+    for(j in 1:nrow(temp)){
+      if(!is.na(temp[j,1])){
+        sum_temp = sum_temp+user_sim[j,ncol(rat_user)]
+      }
+      
+    }
+    tot[z] = sum_temp
+    z=z+1
+  } 
+  
+  
+}
+z=NULL
+
+z=1
+for(i in 1:ncol(rat_user)){
+  if(is.na(rat_user[1,i]))
+  {
+    rat_user[1,i] = col_sums[[z]]/tot[[z]]
+    z=z+1
+  }
+  
+}
+
+return(rat_user)
+}
+
+
+#x[sapply(x, function(x) any(is.na(x)))]
+
+
+
+item_sim = cosine(as.matrix(x)) #item similarity
+
