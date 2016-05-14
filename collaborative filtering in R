@@ -3,7 +3,7 @@ library(data.table)
 library(dplyr)
 
 #data loading
-ratings = read.csv("C:/Users/Suresh/Desktop/movie_rating.csv")
+ratings = read.csv("movie_rating.csv")
 
 #data processing and formatting
 movie_ratings = as.data.frame(acast(ratings, title~critic, value.var="rating"))
